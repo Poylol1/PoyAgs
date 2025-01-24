@@ -1,0 +1,60 @@
+@use"./style/variables" as v;
+
+window.Bar {
+  background: transparent;
+  color: v.$theme_bg_color;
+  font-weight: bold;
+  border-radius: 2px;
+  border: 1px solid v.$dark_blue;
+
+  >centerbox {
+    background: v.$theme_bg_color;
+    border-radius: 10px;
+    margin: 1px;
+  }
+
+  label {
+    color: v.$bluer
+  }
+
+  button {
+    background: v.$button_color;
+    border-radius: 8px;
+    margin: 2px;
+
+    &.workspace {
+      border-radius: 16px;
+      padding: 0px;
+      min-width: 31px;
+    }
+  }
+
+  box {
+    &.Tray-Box {
+      //border: #{$bluer} 2px;
+      padding-right: 4px;
+      padding-left: 4px;
+      border-color: v.$dark_blue;
+      margin-left: 10px;
+      border-radius: 4px;
+      background: #3f3f5b;
+    }
+
+    &.climateIcon {
+      margin-left: 0.4em;
+      margin-right: 0.4em;
+      padding-left: 1em;
+      min-width: .7em;
+      background-size: cover;
+      background-position: center;
+    }
+
+  }
+
+
+  icon {
+    &.Tray-Icon {
+      margin: 3px;
+    }
+  }
+}

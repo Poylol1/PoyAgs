@@ -1,0 +1,216 @@
+@use "sass:string";
+@use "./variables" as v;
+
+@function gtkalpha($c, $a) {
+  @return string.unquote("alpha(#{$c},#{$a})");
+}
+
+$error: red;
+
+window.G-Panel-Window {
+  padding: 0 .3rem;
+}
+
+
+box {
+  &.G-Main-Box {
+    //margin-left: 2px;
+    padding: .7em;
+    //margin-bottom: 315px;
+    min-height: 28em;
+    border-radius: 0px 0px 2em 0px;
+    background: v.$bg_color;
+    min-width: 400px;
+    border-top: 0px solid v.$border-color;
+    border-bottom: 3px solid v.$border-color;
+    border-left: 0px solid v.$border-color;
+    border-right: 3px solid v.$border-color;
+  }
+
+  &.G-Calendar-and-Mpris {
+    &:first-child>box {
+      padding-right: 2em;
+    }
+  }
+
+  &.G-Calendar-Wrapper {
+    margin-top: 1em;
+    padding-top: .2em;
+    padding-bottom: 1em;
+    padding-left: 0px;
+    padding-right: 0px;
+    border-radius: 1.5em;
+    background: gtkalpha(v.$button_color, .70);
+
+  }
+
+  &.G-C-Week {
+    >button {
+      padding: .2em;
+      margin: .2em;
+      min-width: 1.7em;
+      min-height: 1.7em;
+
+      >label {
+        font-size: .9em;
+      }
+    }
+  }
+
+  &.G-C-Weekdays {
+    >label {
+      margin-left: .3em;
+      margin-right: .3em;
+    }
+  }
+
+  &.G-Mpris-Box-Wrapper {
+    //min-width: 200px;
+    padding-top: .2em;
+    padding-left: 1em;
+    padding-right: 1em;
+
+    margin: 1em;
+
+    border-radius: 1.5em;
+    background: gtkalpha(v.$button_color, .70);
+  }
+
+  &.G-M-Title-n-Icon {
+    background: gtkalpha(v.$button_color, .30);
+    padding-top: .2em;
+    padding-bottom: .2em;
+    padding-left: .4em;
+    border: 4px red;
+    font-size: 1.5em;
+    color: v.$fg_color;
+  }
+
+  &.G-M-Author {
+    font-size: .5em;
+    color: gtkalpha(v.$fg_color, .7);
+  }
+
+  &.G-M-Cover-Art {
+    border: 1px solid v.$fg_color;
+    //margin-left: 1em;
+    min-width: 7em;
+    min-height: 7em;
+    background-size: cover;
+    background-position: center;
+  }
+
+  // Somehow avoid hexpand for buttons
+  &.G-M-Button-Box {
+    margin: 1em;
+
+    >* {
+      min-height: 3.5em;
+      margin-left: .5em;
+      min-width: 3.5em;
+      background: v.$button_color;
+    }
+  }
+
+
+
+
+  &.G-C-Modification-Box {
+
+    >button {
+      padding: 0px;
+    }
+
+    >box {
+
+      >button {
+        min-width: 5px;
+        min-height: 5px;
+        padding: 0px;
+      }
+
+    }
+  }
+
+  &.Zenith {
+    >button {
+      // The day I implement screen saver this will probably change
+      min-width: 4em;
+      min-height: 4em;
+    }
+  }
+
+
+  &.G-M-Player-Changer {
+
+    >* {
+      padding-top: 0px;
+      padding-bottom: 0px;
+    }
+
+    >box {
+      min-width: 1pt;
+
+      >button {
+        padding: 0px;
+        //min-width: 0%;
+      }
+    }
+  }
+
+  &.metadata_progress {
+    margin-top: .2em;
+    margin-right: .1em;
+    border: .2em solid v.$border-color;
+    border-radius: 200em;
+    padding: 0px;
+
+    .progress {
+      border-width: 1em;
+
+      >box {
+        padding: 1.5em;
+
+        border: .2em solid v.$border-color;
+
+        >label {
+          color: v.$font_color;
+          font-size: .8em;
+        }
+
+        >*label {
+          font-size: .8em;
+        }
+      }
+    }
+  }
+
+  &.Screen_Box {
+    >*button {
+      background: v.$button_color;
+    }
+  }
+}
+
+button {
+
+  &.notInMonth {
+    background: v.$dark_blue;
+  }
+}
+
+label {
+
+  &.G-M-Current-Player {
+    font-size: .7em;
+    padding-right: 10em;
+  }
+
+  &.G-C-Months-Label {
+    min-width: 5.5em;
+  }
+
+  &.G-C-Year-Label {
+    min-width: 3.2em;
+  }
+}
