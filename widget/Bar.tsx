@@ -1,19 +1,18 @@
 import { toggleVisibility } from "../Utils/togglePanels"
 import { App, Astal, Gtk, Gdk } from "astal/gtk3"
-import { /* Binding, */ GLib, Variable, bind, timeout } from "astal"
+import { /* Binding, */ GLib, Variable, bind } from "astal"
 import Battery from "gi://AstalBattery";
 //import Mpris from "gi://AstalMpris"
 import Hyprland from "gi://AstalHyprland";
 import AstalApps from "gi://AstalApps";
 //import Backlight from "../Utils/backlightService";
 import Audio from "gi://AstalWp";
-import { AdvancedFind } from "../Utils/generalUtils";
+import { AdvancedFind, httpGet } from "../Utils/generalUtils";
 import Weather from "../Utils/weatherService";
 
 import {
 	exec,
-	execAsync
-} from "astal/process"; import PowerProfiles from "gi://AstalPowerProfiles";
+} from "astal/process";
 import Tray from "gi://AstalTray";
 import Bluetooth from "gi://AstalBluetooth";
 import Internet from "gi://AstalNetwork";
@@ -25,13 +24,14 @@ import Internet from "gi://AstalNetwork";
 const conf = exec("bash -c 'echo $XDG_CONFIG_HOME'") + "/ags/";
 
 
+
 const specialWorkspaces: { [key: string]: string | null } = {
 	"magic": "bibtex",
 	"scratchpad": "folder-calculate-symbolic",
 	"bluetooth": "network-bluetooth",
 }
 // TODO make this actually detect a change with a listener or something whatever idk
-let inhibitorActive = Variable(false);
+//let inhibitorActive = Variable(false);
 
 function Wireless() {
 	const bluetooth = Bluetooth.get_default()
@@ -148,6 +148,7 @@ function Climate() {
 				return `background-image: url('${p.main.icon_path}')`
 			})} />
 			<label label={bind(weather, "properties").as(v => `${Math.round(v.temp.temp)}°C`)} />
+
 		</box>
 	</button>
 
@@ -210,7 +211,7 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
 				<Workspaces />
 			</box >
 			<box hexpand halign={Gtk.Align.END}>
-				< Wifi />
+				<Wifi />
 				<Wireless />
 				<Volume />
 				<FocusedClient />

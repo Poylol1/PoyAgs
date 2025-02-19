@@ -1,6 +1,17 @@
 import GLib from "gi://GLib?version=2.0";
 import Soup from "gi://Soup?version=3.0";
+import { execAsync, exec } from "astal";
 
+const CONFIG = exec("bash -c 'echo $XDG_CONFIG_HOME'") + "/ags/";
+/**
+ * `message`
+ */
+function logfile(message: string): void {
+	execAsync(["bash", "-c", `echo ${message} | tee -a ${CONFIG}ttymessages.log`])
+		.then(_ => { console.log(message) })
+		.catch(r => console.error(r));
+
+}
 /**
  *	```arr: Array<any>``` the array which will be searched
  *	```object: any``` The object where the properties are. It may also be a pure string

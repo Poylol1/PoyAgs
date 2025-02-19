@@ -87,7 +87,9 @@ export default class Weather extends GObject.Object {
 	}
 	async update(city?: string | undefined | null, find?: boolean | undefined | null): Promise<WeatherProperties> {
 		if ((city === undefined || city === null) && find === true) {
-			await this.findCity()
+			//await this.findCity()
+			this.#city.Name = "Tokyo"
+			this.#city.lon = -1;
 		}
 		if (city !== undefined && city !== null) {
 			this.#city.Name = city;

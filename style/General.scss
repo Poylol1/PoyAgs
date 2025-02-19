@@ -161,17 +161,20 @@ box {
   &.metadata_progress {
     margin-top: .2em;
     margin-right: .1em;
-    border: .2em solid v.$border-color;
     border-radius: 200em;
     padding: 0px;
 
     .progress {
       border-width: 1em;
+      // When the fucking line is not there it will make this the implement
+      //background: v.$border-color;
+      color: v.$font_color;
 
       >box {
         padding: 1.5em;
-
-        border: .2em solid v.$border-color;
+        background: v.$button_color;
+        border: .5em solid v.$border-color;
+        border-radius: 22em;
 
         >label {
           color: v.$font_color;

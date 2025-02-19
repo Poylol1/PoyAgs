@@ -352,38 +352,54 @@ function GeneralBar() {
 	const ramPercent = Variable.derive([bind(metadata, "ram_free"), bind(metadata, "ram_total")], (v1, v2) => [v2 - v1, v2])
 	const tempPercent = Variable.derive([bind(metadata, "temperature_current"), bind(metadata, "temperature_urgent")], (t1, t2) => t1 / t2)
 	return <box vertical>
-		<box>
-			<MetadataProgress
-				icon={"cpu"}
-				value={bind(metadata, "cpu_used").as(i => i / 100)}
-				labelTop={bind(metadata, "cpu_used").as(i => `${forceChar(i, 2, 1)}%`)}
-				labelBottom={bind(metadata, "cpu_total").as(i => `${i}%`)}
-				tooltipText={bind(metadata, "cpu_used").as(i => `${i}% of CPU is being used`)}
-			/>
-			<MetadataProgress
-				icon={"disk-quota"}
-				value={bind(diskPercent).as(([v1, v2]) => v1 / v2)}
-				labelTop={bind(diskPercent).as(([v1, _]) => `${Math.round(v1 * .0001) / 100}GB`)}
-				labelBottom={bind(diskPercent).as(([_, v2]) => `${Math.round(v2 * .0001) / 100}GB`)}
-				tooltipText={bind(diskPercent).as(([v1, v2]) => `${Math.round(v1 * .0001) / 100}GB used out of ${Math.round(v2 * .0001) / 100}GB available`)}
-			/>
-			<MetadataProgress
-				value={bind(ramPercent).as(v => v[0] / v[1])}
-				labelTop={bind(ramPercent).as(([v1, _]) => `${Math.round(v1 * 100) / 100}GB`)}
-				labelBottom={bind(ramPercent).as(([_, v2]) => `${Math.round(v2 * 100) / 100}GB`)}
-				tooltipText={bind(ramPercent).as(([v1, v2]) => `${Math.round(v1 * 100) / 100}GB of RAM used out of ${Math.round(v2 * .0001) / 100}GB`)}
-			/>
-			<MetadataProgress value={bind(tempPercent)}
-				icon={'temperature-cold'}
-				labelTop={bind(metadata, "temperature_current").as(t => `${t}℃ `)}
-				labelBottom={bind(metadata, "temperature_urgent").as(t => `${t}℃ `)}
-				tooltipText={bind(metadata, "temperature_current").as(t => `Current Temperature ${t}℃ `)}
-			/>
+		<box vertical>
+			<box>
+				<MetadataProgress
+					icon={"cpu"}
+					value={bind(metadata, "cpu_used").as(i => i / 100)}
+					labelTop={bind(metadata, "cpu_used").as(i => `${forceChar(i, 2, 1)}%`)}
+					labelBottom={bind(metadata, "cpu_total").as(i => `${i}%`)}
+					tooltipText={bind(metadata, "cpu_used").as(i => `${i}% of CPU is being used`)}
+				/>
+				<MetadataProgress
+					icon={"disk-quota"}
+					value={bind(diskPercent).as(([v1, v2]) => v1 / v2)}
+					labelTop={bind(diskPercent).as(([v1, _]) => `${Math.round(v1 * .0001) / 100}GB`)}
+					labelBottom={bind(diskPercent).as(([_, v2]) => `${Math.round(v2 * .0001) / 100}GB`)}
+					tooltipText={bind(diskPercent).as(([v1, v2]) => `${Math.round(v1 * .0001) / 100}GB used out of ${Math.round(v2 * .0001) / 100}GB available`)}
+				/>
+			</box>
+			<box>
+				<MetadataProgress
+					icon={'dialog-memory'}
+					value={bind(ramPercent).as(v => v[0] / v[1])}
+					labelTop={bind(ramPercent).as(([v1, _]) => `${Math.round(v1 * 100) / 100}GB`)}
+					labelBottom={bind(ramPercent).as(([_, v2]) => `${Math.round(v2 * 100) / 100}GB`)}
+					tooltipText={bind(ramPercent).as(([v1, v2]) => `${Math.round(v1 * 100) / 100}GB of RAM used out of ${Math.round(v2 * 10000) / 100}GB`)}
+				/>
+				<MetadataProgress value={bind(tempPercent)}
+					icon={'temperature-cold'}
+					labelTop={bind(metadata, "temperature_current").as(t => `${t}℃ `)}
+					labelBottom={bind(metadata, "temperature_urgent").as(t => `${t}℃ `)}
+					tooltipText={bind(metadata, "temperature_current").as(t => `Current Temperature ${t}℃ `)}
+				/>
+			</box>
 		</box>
-		<box className={"Screen_Box"}>
-			<Inhibitor />
-			<BatteryProfile />
-			<Backlight />
+	</box>
+}
+
+function screenWidget({ icon = "question", clickLeft = () => { }, clickRight = () => { }, className = "screenWidget" }): JSX.Element {
+
+	return <box className={className}>
+		<box>
+			<button onClick={clickLeft}>
+				<icon icon={icon} />
+			</button>
+		</box>
+		<box>
+			<button onClick={clickRight}>
+				<icon icon={"go-next"} />
+			</button>
 		</box>
 	</box>
 }
@@ -400,7 +416,7 @@ interface MetadataProgressType {
 function MetadataProgress({ value, icon = "question", labelTop, labelBottom, tooltipText, className = "metadata_progress" }: MetadataProgressType): JSX.Element {
 	const { CENTER } = Gtk.Align;
 	return <box tooltipText={tooltipText} className={className}>
-		<circularprogress startAt={1 / 4} endAt={1 / 4} value={value} className={"progress"} halign={CENTER} valign={CENTER}>
+		<circularprogress startAt={1 / 4} endAt={1 / 4} value={value} className={"progress"} halign={CENTER} valign={CENTER} rounded >
 			<box vertical halign={CENTER} valign={CENTER} vexpand hexpand>
 				<label label={labelTop} className={"top-progress"} />
 				<box hexpand halign={CENTER}>
@@ -465,7 +481,14 @@ export default function GeneralPanel(gdkmonitor: Gdk.Monitor): JSX.Element {
 						<Calendar />
 						<GeneralBar />
 					</box>
-					<MprisPlayer />
+					<box vertical>
+						<MprisPlayer />
+						<box className={"Screen_Box"}>
+							<Inhibitor />
+							<BatteryProfile />
+							<Backlight />
+						</box>
+					</box>
 				</box>
 				<Zenith />
 			</box>
