@@ -7,12 +7,9 @@ import Hyprland from "gi://AstalHyprland";
 import AstalApps from "gi://AstalApps";
 //import Backlight from "../Utils/backlightService";
 import Audio from "gi://AstalWp";
-import { AdvancedFind, httpGet } from "../Utils/generalUtils";
+import { AdvancedFind } from "../Utils/generalUtils";
 import Weather from "../Utils/weatherService";
-
-import {
-	exec,
-} from "astal/process";
+import { exec, } from "astal/process";
 import Tray from "gi://AstalTray";
 import Bluetooth from "gi://AstalBluetooth";
 import Internet from "gi://AstalNetwork";
@@ -22,8 +19,6 @@ import Internet from "gi://AstalNetwork";
 // The normal config directory of the system or smth
 //Weather("Salinas")
 const conf = exec("bash -c 'echo $XDG_CONFIG_HOME'") + "/ags/";
-
-
 
 const specialWorkspaces: { [key: string]: string | null } = {
 	"magic": "bibtex",

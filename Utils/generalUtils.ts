@@ -4,10 +4,13 @@ import { execAsync, exec } from "astal";
 
 const CONFIG = exec("bash -c 'echo $XDG_CONFIG_HOME'") + "/ags/";
 /**
- * `message`
+ * `message` The message you wish to log
+ * This is logged in ./ttymessages.log in the root ags directory
+ * Better than console.log or print as this is easier to trace and
+ * better overall; however, beware user for constant changes
  */
-function logfile(message: string): void {
-	execAsync(["bash", "-c", `echo ${message} | tee -a ${CONFIG}ttymessages.log`])
+export function logfile(message: string): void {
+	execAsync(["bash", "-c", `echo '${message}' | tee -a ${CONFIG}ttymessages.log`])
 		.then(_ => { console.log(message) })
 		.catch(r => console.error(r));
 

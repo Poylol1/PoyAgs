@@ -45,12 +45,16 @@ export default class Weather extends GObject.Object {
 			.catch(e => { console.error(e) })
 		return this.#city
 	}
+	/**
+	 * Takes a city and returns all the properties. That is 
+	 * it is the main get request that this service is based around
+	 */
 	async #getRequest(city: string): Promise<{ [key: string]: any }> {
 		//fetch(url, { method: "GET" })
 		const place = await this.#placePos(city)
 		const climateUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${place.lat}&lon=${place.lon}&appid=${APIKEY}&units=metric`;
 		return await httpGet(climateUrl)
-			.then(({ body }) => body)
+			.then(({ body, status }) => { return body })
 			.catch(e => { console.error(e) }) ?? this.#nullObject;
 		// Get icons through https:openweathermap.org/img/wn/${iconid}.png
 
@@ -71,12 +75,13 @@ export default class Weather extends GObject.Object {
 	 * PURPOSES HERE IT GOES DIRECTLY TO THE CLIMATE API SO THERE SHOULD NOT BE
 	 * ANY PROBLEMS, STILL IF YOU DONT LIKE THIS PLEASE DISABLE IT*/
 	async findCity() {
-		let ip;
-		await httpGet("https://ifconfig.me")
-			.then(({ body }) => { ip = body })
-			.catch(i => console.error(i))
-		await httpGet(`https://ipapi.co/${ip}/city/`).then(({ body }) => {
-			this.#city.Name = body
+		// let ip: string = (await httpGet("https://ifconfig.me"))['body']
+		// await httpGet(`https://ipapi.co/${ip}/city/`).then(({ body }) => {
+		// 	this.#city.Name = body
+		// 	this.#city.lon = -1;
+		// }).catch(i => console.error(i))
+		await httpGet(`https://ipinfo.io/city`).then(({ body }) => {
+			this.#city.Name = body;
 			this.#city.lon = -1;
 		}).catch(i => console.error(i))
 	}
@@ -87,13 +92,16 @@ export default class Weather extends GObject.Object {
 	}
 	async update(city?: string | undefined | null, find?: boolean | undefined | null): Promise<WeatherProperties> {
 		if ((city === undefined || city === null) && find === true) {
-			//await this.findCity()
-			this.#city.Name = "Tokyo"
-			this.#city.lon = -1;
+			await this.findCity()
 		}
 		if (city !== undefined && city !== null) {
 			this.#city.Name = city;
-		} this.#properties = responseToWeather(await this.#getRequest(this.#city.Name)); this.notify("properties")
+		}
+		// Gets the properties
+		const props = await this.#getRequest(this.#city.Name)
+		// transforms them into the proper type
+		this.#properties = responseToWeather(props);
+		this.notify("properties")
 		return this.#properties;
 	}
 	/** To use the find function if the city to null*/

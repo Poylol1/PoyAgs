@@ -40,6 +40,7 @@ interface Location {
 }
 //@register({GTypeName: "WeatherProperties"})
 export default interface WeatherProperties {
+	// Main string I guess
 	main: weatherMain
 	temp: Temperature
 	time: Time
